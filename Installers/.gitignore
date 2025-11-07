@@ -1,0 +1,14 @@
+## Main
+.terraform
+.tf
+kube/exports_api/
+kube/dev(REDUNDANT)/
+*.key
+*.keys
+*keys.txt
+*.csv
+
+## Specific
+*.env
+*.envs
+.git/
