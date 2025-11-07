@@ -1,25 +1,34 @@
-# .github/workflows/check-pr-author.yml
-name: Enforce PR Author
+name: Check PR Author
 
 on:
   pull_request:
 
 jobs:
-  check-author:
+  check-author-permissions:
     runs-on: ubuntu-latest
+
     steps:
-      - name: Check PR author
-        uses: actions/github-script@v7
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          script: |
-            const prAuthor = context.payload.pull_request.user.login;
-            const allowedAuthor = "beckyshaw";
+    - name: Checkout code
+      uses: actions/checkout@v3
 
-            console.log(`PR opened by: ${prAuthor}`);
+    - name: Fetch pull request author
+      id: pr-author
+      run: |
+        echo "Fetching PR author..."
+        PR_AUTHOR=$(jq -r .pull_request.user.login < $GITHUB_EVENT_PATH)
+        echo "PR_AUTHOR=$PR_AUTHOR" >> $GITHUB_ENV
+        echo "PR_AUTHOR is $PR_AUTHOR"
 
-            if (prAuthor !== allowedAuthor) {
-              core.setFailed(`❌ PR must be from '${allowedAuthor}', but it is from '${prAuthor}'`);
-            } else {
-              console.log(`✅ PR author is '${allowedAuthor}', check passed.`);
-            }
+    - name: Validate PR Author
+      id: validate-author
+      run: |
+        echo "Validating PR author against approved authors list..."
+        APPROVED_AUTHORS=$(cat .github/AUTHORS)
+        if echo "$APPROVED_AUTHORS" | grep -qw "$PR_AUTHOR"; then
+          echo "$PR_AUTHOR is an approved author."
+          echo "AUTHORIZATION=Authorized" >> $GITHUB_ENV
+        else
+          echo "ERROR: $PR_AUTHOR is not an approved author."
+          echo "AUTHORIZATION=Unauthorized" >> $GITHUB_ENV
+          exit 1
+        fi
