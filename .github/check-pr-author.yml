@@ -1,0 +1,25 @@
+# .github/workflows/check-pr-author.yml
+name: Enforce PR Author
+
+on:
+  pull_request:
+
+jobs:
+  check-author:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check PR author
+        uses: actions/github-script@v7
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            const prAuthor = context.payload.pull_request.user.login;
+            const allowedAuthor = "beckyshaw";
+
+            console.log(`PR opened by: ${prAuthor}`);
+
+            if (prAuthor !== allowedAuthor) {
+              core.setFailed(`❌ PR must be from '${allowedAuthor}', but it is from '${prAuthor}'`);
+            } else {
+              console.log(`✅ PR author is '${allowedAuthor}', check passed.`);
+            }
