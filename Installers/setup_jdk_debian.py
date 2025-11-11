@@ -38,7 +38,7 @@ def main():
     install_jdks()
     setup_alternatives()
     create_aliases()
-    print("✅ Debian setup complete! Use `sudo update-alternatives --config java` to switch or the aliases.")
+    print("✅ Debian setup complete! Use `jdk<17/21>` to switch or the aliases.")
 
 if __name__ == "__main__":
     main()
