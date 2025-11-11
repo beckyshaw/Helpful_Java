@@ -11,29 +11,20 @@ This repository provides scripts to **install and manage multiple Java versions*
 
 ## Directory Structure
 - **Installers/**
-  - `debian_setup.py`
-  - `ubuntu_setup.py` 
-  - `windows_setup.py`
+  - `setup_jdk_custom_setup.py`
+  - `setup_jdk_debian_setup.py`
+  - `setup_jdk_ubuntu_setup.py` 
+  - `setup_jdk_windows_setup.py`
 - License
 - README.md
 
 
 ## Usage
 
-### Debian
-```
-sudo python3 debian_setup.py
-```
-
-### Ubuntu
-```
-sudo python3 ubuntu_setup.py
-```
-
-### Windows
-```
-python3 windows_setup.py
-```
+### Run
+python3 setup_jdk_custom.py 
+OR
+python3 setup_jdk_custom.py --quiet # runs wihtout the cli prompts
 
 
 ### Switching
