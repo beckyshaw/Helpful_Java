@@ -1,0 +1,27 @@
+name: Check Commit Author
+
+on:
+  pull_request:
+    types:
+      - opened        # Trigger when PR is opened
+      - synchronize  # Trigger when PR is updated with new commits
+      - reopened      # Trigger when PR is reopened
+    branches:
+      - main  # The branch you want to protect, change if necessary
+
+jobs:
+  check-author:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Check commit author
+      run: |
+        AUTHOR=$(git log -1 --pretty=format:'%an')
+        echo "Commit author is: $AUTHOR"
+        if [[ "$AUTHOR" != "BeckyShaw" ]]; then
+          echo "Error: Commit author is not allowed. Only the authorised can commit directly."
+          exit 1
+        fi
